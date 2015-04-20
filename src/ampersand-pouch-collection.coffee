@@ -31,6 +31,16 @@ module.exports = AmpersandCollection.extend
   getOrFetch: (id, options, cb) ->
     console.log 'getOrFetch'
   fetchById: (id, cb) ->
-    console.log 'fetchById'
+    me = @
+    idObj = {}
+    idObj[@model.prototype.idAttribute] = id
+    model = new @model idObj, {collection: @}
+    model.fetch
+      success: ->
+        me.add model
+        if cb then cb null, model
+      error: ->
+        delete model.collection
+        if cb then cb Error 'not found'
   parse: (result) ->
     _.pluck result.rows, 'doc'
