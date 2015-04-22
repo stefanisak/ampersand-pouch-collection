@@ -12,6 +12,9 @@
     initialize: function() {
       return this.sync = sync.apply(this, [this.pouch]);
     },
+    getPouchDB: function() {
+      return this.sync.pouchDB;
+    },
     fetch: function(options) {
       var me, success;
       options = options || {};
@@ -51,9 +54,6 @@
       };
       model.save(null, options);
       return model;
-    },
-    sync: function() {
-      return sync.apply(this, arguments);
     },
     getOrFetch: function(id, options, cb) {
       return console.log('getOrFetch');

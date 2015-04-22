@@ -4,8 +4,8 @@ _ = require 'underscore'
 sync = require 'ampersand-pouch-sync'
 
 module.exports = AmpersandCollection.extend
-  initialize: ->
-    @sync = sync.apply @, [ @pouch ]
+  initialize: -> @sync = sync.apply @, [ @pouch ]
+  getPouchDB: -> @sync.pouchDB
   fetch: (options) ->
     options = options || {}
     options.parse = true unless options.parse?
@@ -27,7 +27,6 @@ module.exports = AmpersandCollection.extend
       if success then success model, resp, options
     model.save null, options
     model
-  sync: -> sync.apply @, arguments
   getOrFetch: (id, options, cb) ->
     console.log 'getOrFetch'
   fetchById: (id, cb) ->
