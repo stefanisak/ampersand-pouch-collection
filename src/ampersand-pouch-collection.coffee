@@ -28,7 +28,22 @@ module.exports = AmpersandCollection.extend
     model.save null, options
     model
   getOrFetch: (id, options, cb) ->
-    console.log 'getOrFetch'
+    if arguments.length isnt 3
+      cb = options
+      options = {}
+    self = @
+    model = @get id
+    if model then return cb null, model
+    done = ->
+      model = self.get id
+      if model
+        if cb then cb null, model
+        else cb new Error 'not found'
+    if options.all
+      options.success = done
+      options.error = done
+      return @fetch options
+    else return @fetchById id, cb
   fetchById: (id, cb) ->
     me = @
     idObj = {}

@@ -56,7 +56,33 @@
       return model;
     },
     getOrFetch: function(id, options, cb) {
-      return console.log('getOrFetch');
+      var done, model, self;
+      if (arguments.length !== 3) {
+        cb = options;
+        options = {};
+      }
+      self = this;
+      model = this.get(id);
+      if (model) {
+        return cb(null, model);
+      }
+      done = function() {
+        model = self.get(id);
+        if (model) {
+          if (cb) {
+            return cb(null, model);
+          } else {
+            return cb(new Error('not found'));
+          }
+        }
+      };
+      if (options.all) {
+        options.success = done;
+        options.error = done;
+        return this.fetch(options);
+      } else {
+        return this.fetchById(id, cb);
+      }
     },
     fetchById: function(id, cb) {
       var idObj, me, model;
