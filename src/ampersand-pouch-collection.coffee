@@ -1,5 +1,5 @@
 AmpersandCollection = require 'ampersand-collection'
-_ = require 'underscore'
+pluck = require 'lodash.pluck'
 
 sync = require 'ampersand-pouch-sync'
 
@@ -57,4 +57,4 @@ module.exports = AmpersandCollection.extend
         delete model.collection
         if cb then cb Error 'not found'
   parse: (result) ->
-    _.pluck result.rows, 'doc'
+    pluck result.rows, 'doc'
